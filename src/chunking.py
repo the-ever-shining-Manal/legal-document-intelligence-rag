@@ -9,7 +9,7 @@ def chunking(pages):
     current_title=""
     current_text=""
 
-    article_pattern=r"ARTICLE\s+([\d\.]+)\s+\((.*?)\)"
+    article_pattern = r"ARTICLE\s+([\d\.]+)"
     section_pattern=r"SECTION\s+\d+:\s+.*"
     chapter_pattern=r"CHAPTER\s+(\d+)"
 
@@ -41,16 +41,34 @@ def chunking(pages):
                         "section":current_section,
                         "article":current_article,
                         "title":current_title,
-                        "page":page["page number"],
+                        "page":page["page"],
                         "text":current_text.strip()
 
                     })
                 current_article=article_match.group(1)
-                current_title=article_match.group(2)
+                current_title = ""
+                for j in range(i + 1, len(lines)):
+
+                    next_line = lines[j].strip()
+
+                    if next_line.startswith("("):
+                        current_title = next_line
+                        break
                 current_text=""
 
             else:
                 current_text+=line+"\n"
+    if current_article and current_text:
+        chunks.append({
+            "chapter_number": current_chapter,
+            "chapter_title": current_chapter_title,
+            "section": current_section,
+            "article": current_article,
+            "title": current_title,
+            "page": page["page"],
+            "text": current_text.strip()
 
+        })
+    print(f"Total chunks: {len(chunks)}")
     return chunks
 

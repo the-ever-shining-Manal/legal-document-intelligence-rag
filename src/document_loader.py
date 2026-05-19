@@ -7,11 +7,12 @@ def load_document(document):
     file= fitz.open(document)
     pages=[]
     for page_num in range(len(file)):
-        exctracted_text=fitz.get_text(file[page_num])
-        pages.append([{
-            'page number':page_num+1,
+        page=file[page_num]
+        exctracted_text=page.get_text()
+        pages.append({
+            'page':page_num+1,
             'text':exctracted_text
-        }])
+        })
 
     return pages
 
