@@ -1,4 +1,4 @@
-from numpy.ma.core import indices
+
 from sentence_transformers import SentenceTransformer
 import faiss
 import numpy as np
